@@ -2,6 +2,9 @@
 
 const User = use('App/Models/User')
 const Hash = use('Hash');
+const {
+  validateAll
+} = use('Validator')
 
 class AuthController {
 
@@ -10,6 +13,21 @@ class AuthController {
     response,
     auth
   }) {
+    const rules = {
+      email: "required|email|unique:users",
+      password: "required|min:8|max:50"
+    }
+
+    const validation = await validateAll(request.all(), rules)
+    if (validation.fails()) {
+      let vmsg = validation.messages()
+      return response.status(422).json({
+        'message': "Validation failed",
+        user: {},
+        errors: vmsg
+      })
+    }
+
     let data = await request.only(['email', 'password']);
     let user = await User.query().where('email', data.email).first()
     if (user) {
@@ -43,6 +61,22 @@ class AuthController {
     response,
     auth
   }) {
+    const rules = {
+      username: "required|min:3|unique:users",
+      email: "required|email|unique:users",
+      password: "required|min:8|max:50"
+    }
+
+    const validation = await validateAll(request.all(), rules)
+    if (validation.fails()) {
+      let vmsg = validation.messages()
+      return response.status(422).json({
+        'message': "Validation failed",
+        user: {},
+        errors: vmsg
+      })
+    }
+
     let data = request.only(['username', 'email', 'password']);
     try {
       let newuser = await User.create(data);
