@@ -17,12 +17,17 @@ class ActivityLog {
     ctx
   }, next) {
     await next()
-    let data = {
-      url: request.url(),
-      payload: `${request.raw()}`,
-      response: response.response.statusCode,
+    try {
+      let data = {
+        url: request.url(),
+        payload: `${request.raw()}`,
+        response: response.response.statusCode,
+      }
+      const save = await Log.create(data)
+    } catch (err) {
+
     }
-    const save = await Log.create(data)
+
   }
 }
 

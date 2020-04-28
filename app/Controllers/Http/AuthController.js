@@ -14,8 +14,8 @@ class AuthController {
     auth
   }) {
     const rules = {
-      email: "required|email|unique:users",
-      password: "required|min:8|max:50"
+      email: "required|email",
+      password: "required|min:6|max:50"
     }
 
     const validation = await validateAll(request.all(), rules)
