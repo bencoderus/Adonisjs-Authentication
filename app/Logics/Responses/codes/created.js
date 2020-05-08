@@ -1,4 +1,6 @@
+const respond = require('../respond')
+
 const send = (response, message, data) => {
-  response.status(201).json({ message, data })
+  respond(response, 201, message, data)
 }
 module.exports = send
