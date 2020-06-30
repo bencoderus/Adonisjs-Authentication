@@ -11,23 +11,16 @@ class ActivityLog {
    * @param {Request} ctx.request
    * @param {Function} next
    */
-  async handle({
-    request,
-    response,
-    ctx
-  }, next) {
+  async handle ({ request, response, ctx }, next) {
     await next()
     try {
       let data = {
         url: request.url(),
         payload: `${request.raw()}`,
-        response: response.response.statusCode,
+        response: response.response.statusCode
       }
       const save = await Log.create(data)
-    } catch (err) {
-
-    }
-
+    } catch (err) {}
   }
 }
 
